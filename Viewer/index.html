@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+    <script src="https://unpkg.com/chartjs-plugin-colorschemes"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js"></script>
+    <script src="mqttchart.js"></script>
+    <link rel="stylesheet" href="style.css">
+     <title>Weather Monitor</title>
+</head>
+<body>
+    <div>
+        <select name="duration" id="select-1">
+            <option value="60">1 min.</option>
+            <option value="300">5 min.</option>
+            <option value="1200" selected>20 min.</option>
+            <option value="3600">1 hour</option>
+        </select>
+    </div>
+    <div id="container">
+        <div><canvas id="chart0"></canvas></div>
+        <div><canvas id="chart1"></canvas></div>
+        <div><canvas id="chart2"></canvas></div>
+    </div>
+</body>
+<script>
+
+$(window).on('load', function() {
+    // id, MQTT topic, label (Y-axis), min, max
+    setChart('chart0','Direction','Direction', 0, 7); // 'undefined' means auto
+    setChart('chart1','WindSpeed','Wind Speed (m/s)', 0, undefined); // 'undefined' means auto
+    setChart('chart2','AccumulatedRainfall','Accumulated rainfall (mm)', 0, undefined); // 'undefined' means auto
+
+    //  MQTT Broker IP Address, MQTT over Websocket Port, duration (ms), repeat timer (ms) 
+    var duration = $('#select-1 option:selected').val() * 1000;
+    startChart("your_mqtt_over_websocket_server", 8001, duration, 10 * 1000);
+
+    // Update duration
+    $(function(){
+        $('select').change(function(){
+            let val = $(this).val();
+            console.log("Duration changed: " + val);
+            setDuration(val);
+        });
+    });
+});
+
+
+</script>
+</html>
