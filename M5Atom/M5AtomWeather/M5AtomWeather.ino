@@ -83,7 +83,7 @@ void loop(){
   windCounter = 0;
   portEXIT_CRITICAL_ISR(&mutex);
   
-  // Accumulated Rainfall (mm/h)
+  // Accumulated Rainfall (mm)
   portENTER_CRITICAL_ISR(&mutex);
   float rain = rainCounter * 0.2794;
   if(now - rainLastReported > rainDurationSec * 1000){
